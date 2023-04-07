@@ -1,0 +1,117 @@
+package getPostName;
+
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+public class GuiSearch {
+
+    private JFrame frame;
+    private JTextField textField;
+    private JList<String> list;
+
+    private String url = "jdbc:mariadb://localhost:3306/post";
+    private String user = "root";
+    private String password = "root";
+    private JTextField textField_1;
+    private JTextField textField_2;
+
+    public static void main(String[] args) {
+    	
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                	GuiSearch window = new GuiSearch();
+                    window.frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public GuiSearch() {
+        initialize();
+    }
+
+    private void initialize() {
+        frame = new JFrame();
+        frame.setBounds(100, 100, 800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+
+        textField = new JTextField();
+        textField.setBounds(10, 10, 200, 30);
+        frame.getContentPane().add(textField);
+        textField.setColumns(10);
+
+        JButton btnSearch = new JButton("Search");
+        btnSearch.setBounds(692, 9, 80, 30);
+        frame.getContentPane().add(btnSearch);
+        btnSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String dong = textField.getText();
+                searchPostalCode(dong);
+            }
+        });
+
+        list = new JList<String>();
+        JScrollPane scrollPane = new JScrollPane(list);
+        scrollPane.setBounds(10, 50, 762, 377);
+        frame.getContentPane().add(scrollPane);
+        
+        textField_1 = new JTextField();
+        textField_1.setEditable(false);
+        textField_1.setBounds(10, 437, 762, 21);
+        frame.getContentPane().add(textField_1);
+        textField_1.setColumns(10);
+        
+        textField_2 = new JTextField();
+        textField_2.setColumns(10);
+        textField_2.setBounds(10, 468, 762, 21);
+        frame.getContentPane().add(textField_2);
+    }
+
+    private void searchPostalCode(String dong) {
+        try {
+        	Class.forName("org.mariadb.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, user, password);
+            
+
+            String selectQuery = "SELECT * FROM zippost WHERE dong LIKE ?";
+            PreparedStatement pstmt = conn.prepareStatement(selectQuery);
+            pstmt.setString(1, dong + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+
+            DefaultListModel<String> model = new DefaultListModel<String>();
+            while (rs.next()) {
+                String zipcode = rs.getString("zipcode");
+                String city = rs.getString("city");
+                String region = rs.getString("region");
+                dong = rs.getString("dong");
+                String address = rs.getString("address");
+                model.addElement(zipcode + "\t" + city + "\t" + region + "\t" + dong + "\t" + address);
+            }
+
+            list.setModel(model);
+
+            rs.close();
+            pstmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,67 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.JButton;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+
+public class JSpinner extends JFrame {
+
+	private JPanel contentPane;
+	private JButton btn;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					JSpinner frame = new JSpinner();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public JSpinner() {
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 800, 600);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		javax.swing.JSpinner spinner = new javax.swing.JSpinner();
+		spinner.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				System.out.println((Integer)spinner.getValue());
+			}
+		});
+		spinner.setModel(new SpinnerNumberModel(50, 0, 100, 10));
+		spinner.setBounds(12, 10, 123, 22);
+		contentPane.add(spinner);
+		
+		btn = new JButton("New button");
+		btn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println((Integer)spinner.getValue());
+			}
+		});
+		btn.setBounds(12, 42, 97, 23);
+		contentPane.add(btn);
+	}
+}

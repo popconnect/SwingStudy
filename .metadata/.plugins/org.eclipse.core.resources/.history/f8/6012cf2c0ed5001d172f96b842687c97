@@ -1,0 +1,5 @@
+import javax.swing.DefaultComboBoxModel;
+
+public class CustomComboBoxModel2 extends DefaultComboBoxModel<E> {
+
+}

@@ -1,0 +1,102 @@
+package getPostName;
+
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class GuiSearch {
+
+    private JFrame frame;
+    private JTextField textField;
+    private JTextArea textArea;
+
+    private String url = "jdbc:mariadb://localhost:3306/mydb";
+    private String user = "root";
+    private String password = "password";
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                	GuiSearch window = new GuiSearch();
+                    window.frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public GuiSearch() {
+        initialize();
+    }
+
+    private void initialize() {
+        frame = new JFrame();
+        frame.setBounds(100, 100, 450, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+
+        textField = new JTextField();
+        textField.setBounds(10, 10, 200, 30);
+        frame.getContentPane().add(textField);
+        textField.setColumns(10);
+
+        JButton btnSearch = new JButton("Search");
+        btnSearch.setBounds(220, 10, 80, 30);
+        frame.getContentPane().add(btnSearch);
+        btnSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String dong = textField.getText();
+                searchPostalCode(dong);
+            }
+        });
+
+        textArea = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setBounds(10, 50, 400, 200);
+        frame.getContentPane().add(scrollPane);
+    }
+
+    private void searchPostalCode(String dong) {
+        try {
+            Connection conn = DriverManager.getConnection(url, user, password);
+
+            String selectQuery = "SELECT * FROM mytable WHERE dong LIKE ?";
+            PreparedStatement pstmt = conn.prepareStatement(selectQuery);
+            pstmt.setString(1, dong + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+
+            StringBuilder sb = new StringBuilder();
+            while (rs.next()) {
+                String zipcode = rs.getString("zipcode");
+                String city = rs.getString("city");
+                String region = rs.getString("region");
+                String address = rs.getString("address");
+                sb.append(zipcode).append("\t")
+                  .append(city).append("\t")
+                  .append(region).append("\t")
+                  .append(address).append("\n");
+            }
+
+            textArea.setText(sb.toString());
+
+            rs.close();
+            pstmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

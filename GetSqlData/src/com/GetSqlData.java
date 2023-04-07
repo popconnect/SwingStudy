@@ -1,0 +1,72 @@
+package com;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+public class GetSqlData {
+	private Connection conn;
+	public GetSqlData () {
+		
+		String url = "jdbc:mariadb://localhost:3306/sample";
+        String user = "root";
+        String password = "root";
+        
+        try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			conn = DriverManager.getConnection(url, user, password);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public ArrayList<Properties> getSqlCompany(String strCpn) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		ArrayList<Properties> Company = new ArrayList<>();
+		
+		String sql;
+		try {
+			sql = "SELECT e.empno, e.ename, e.job, e.sal, d.deptno, d.loc "
+			      + "FROM emp e JOIN dept d ON e.deptno = d.deptno "
+			      + "WHERE e.job LIKE ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1,  "%" + strCpn + "%"); 
+			rs = pstmt.executeQuery();
+			
+			
+			while(rs.next()) {
+				
+				Properties p = new Properties();
+				
+				p.setDeptno(rs.getString("deptno"));
+				p.setEmpno(rs.getString("empno"));
+				p.setEname(rs.getString("ename"));
+				p.setJob(rs.getString("job"));
+				p.setLoc(rs.getString("loc"));
+				p.setSal(rs.getString("sal"));
+				
+				Company.add(p);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (rs != null) try {rs.close();} catch(SQLException e) {};
+			if (pstmt != null) try {pstmt.close();} catch(SQLException e) {};
+			if (conn != null) try {conn.close();} catch(SQLException e) {};
+			}
+			return Company;
+        }
+	}
+	
+

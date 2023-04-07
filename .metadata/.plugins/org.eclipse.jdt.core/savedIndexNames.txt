@@ -1,0 +1,16 @@
+INDEX VERSION 1.132+C:\Users\Quiz\Desktop\gitmanage\.metadata\.plugins\org.eclipse.jdt.core
+3858398847.index
+3617847098.index
+1994148224.index
+462105419.index
+1616167973.index
+1865797976.index
+4082986927.index
+151702481.index
+2721597531.index
+1540468422.index
+4189031700.index
+2242901995.index
+2290087678.index
+140169029.index
+2518301915.index

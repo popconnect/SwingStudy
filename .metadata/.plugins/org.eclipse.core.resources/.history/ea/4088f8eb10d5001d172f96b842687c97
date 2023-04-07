@@ -1,0 +1,5 @@
+import javax.swing.AbstractListModel;
+
+public class CustomListModel extends AbstractListModel<E> {
+
+}

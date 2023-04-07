@@ -1,0 +1,69 @@
+package com;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+public class GetSqlData {
+	private Connection conn;
+	public GetSqlData () {
+		
+		String url = "jdbc:mariadb://localhost:3306/sample";
+        String user = "root";
+        String password = "root";
+        
+        try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			conn = DriverManager.getConnection(url, user, password);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public ArrayList<Properties> getSqlCompany(String strCpn) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		ArrayList<Properties> Company = new ArrayList<>();
+		
+		String sql;
+		try {
+			sql = "SELECT emp.empno, emp.ename, emp.job, emp.sal, dept.deptno, dept.loc FROM emp JOIN dept ON emp.deptno = dept.deptno";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, strCpn +"%"); 
+			rs = pstmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				
+				Properties p = new Properties();
+				
+				p.setDeptno(rs.getString("emp JOIN dept ON emp.deptno = dept.deptno"));
+				p.setEmpno(rs.getString("emp JOIN dept ON emp.deptno = dept.deptno"));
+				p.setEname(rs.getString("emp JOIN dept ON emp.deptno = dept.deptno"));
+				p.setJob(rs.getString("emp JOIN dept ON emp.deptno = dept.deptno"));
+				p.setLoc(rs.getString("emp JOIN dept ON emp.deptno = dept.deptno"));
+				p.setSal(rs.getString("emp JOIN dept ON emp.deptno = dept.deptno"));
+				
+				Company.add(p);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (rs != null) try {rs.close();} catch(SQLException e) {};
+			if (pstmt != null) try {pstmt.close();} catch(SQLException e) {};
+			if (conn != null) try {conn.close();} catch(SQLException e) {};
+			}
+			return Company;
+        }
+	}
+	
+

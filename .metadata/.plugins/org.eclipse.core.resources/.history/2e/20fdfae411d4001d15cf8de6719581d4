@@ -1,0 +1,10 @@
+/**
+ * 
+ */
+/**
+ * @author Quiz
+ *
+ */
+module Builder {
+	requires java.desktop;
+}

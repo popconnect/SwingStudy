@@ -1,0 +1,84 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JCheckBox;
+import javax.swing.JButton;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class JCheckboxEx01 extends JFrame {
+
+	private JPanel contentPane;
+	private JCheckBox chckbxNewCheckBox;
+	private JCheckBox chckbxNewCheckBox_1;
+	private JCheckBox chckbxNewCheckBox_2;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					JCheckboxEx01 frame = new JCheckboxEx01();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public JCheckboxEx01() {
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 800, 600);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		chckbxNewCheckBox = new JCheckBox("사과");
+		chckbxNewCheckBox.setSelected(true);
+		chckbxNewCheckBox.setBounds(8, 6, 115, 23);
+		contentPane.add(chckbxNewCheckBox);
+		
+		chckbxNewCheckBox_1 = new JCheckBox("수박");
+		chckbxNewCheckBox_1.setBounds(8, 31, 115, 23);
+		contentPane.add(chckbxNewCheckBox_1);
+		
+		chckbxNewCheckBox_2 = new JCheckBox("딸기");
+		chckbxNewCheckBox_2.setBounds(8, 56, 115, 23);
+		contentPane.add(chckbxNewCheckBox_2);
+		
+		JButton btnNewButton = new JButton("뭐가 체크됨?");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				/*
+				 * System.out.println(chckbxNewCheckBox.isSelected());
+				 * System.out.println(chckbxNewCheckBox_1.isSelected());
+				 * System.out.println(chckbxNewCheckBox_2.isSelected());
+				 * 
+				 * System.out.println(chckbxNewCheckBox.getText());
+				 * System.out.println(chckbxNewCheckBox_1.getText());
+				 * System.out.println(chckbxNewCheckBox_2.getText());
+				 */
+				
+				if (chckbxNewCheckBox.isSelected()) System.out.println(chckbxNewCheckBox.getText());
+				if (chckbxNewCheckBox_1.isSelected()) System.out.println(chckbxNewCheckBox_1.getText());
+				if (chckbxNewCheckBox_2.isSelected()) System.out.println(chckbxNewCheckBox_2.getText());
+				}
+			
+			}
+		});
+		btnNewButton.setBounds(8, 85, 97, 23);
+		contentPane.add(btnNewButton);
+	}
+}

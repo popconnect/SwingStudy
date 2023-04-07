@@ -1,0 +1,104 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
+import java.awt.Color;
+
+public class JTextAreaEx02 extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField text2;
+	private JTextArea textArea;
+	private JTextField text1;
+	private JPanel panel;
+	
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					JTextAreaEx02 frame = new JTextAreaEx02();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public JTextAreaEx02() {
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 800, 600);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		panel = new JPanel();
+		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "\uAD6C\uAD6C\uB2E8", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel.setBounds(12, 0, 373, 73);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JLabel lbl1 = new JLabel("시작단");
+		lbl1.setBounds(6, 21, 57, 15);
+		panel.add(lbl1);
+		
+		text1 = new JTextField();
+		text1.setBounds(64, 18, 194, 21);
+		panel.add(text1);
+		text1.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("끝단");
+		lblNewLabel.setBounds(6, 46, 57, 15);
+		panel.add(lblNewLabel);
+		
+		text2 = new JTextField();
+		text2.setBounds(64, 46, 194, 21);
+		panel.add(text2);
+		text2.setColumns(10);
+		
+		JButton btnNewButton = new JButton("구구단 출력");
+		btnNewButton.setBounds(270, 17, 97, 50);
+		panel.add(btnNewButton);
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int startDan = Integer.parseInt(text1.getText());
+				int endDan = Integer.parseInt(text2.getText());
+				for(int i = startDan ; i <= endDan; i++) {
+					for(int j = 1; j<= 9; j++) {
+						textArea.append(i + " X " + j + " = " + i*j + System.lineSeparator());
+					}
+				}
+			}
+			
+		});
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(12, 98, 373, 357);
+		contentPane.add(scrollPane);
+		
+		textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
+	}
+
+}

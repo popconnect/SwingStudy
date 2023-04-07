@@ -1,0 +1,5 @@
+import javax.swing.SpinnerListModel;
+
+public class CustomSpinnerListModel extends SpinnerListModel {
+
+}
